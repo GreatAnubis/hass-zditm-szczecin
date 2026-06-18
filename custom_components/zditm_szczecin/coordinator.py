@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 from datetime import timedelta
 
+import aiohttp
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -20,7 +21,7 @@ class ZditmCoordinator(DataUpdateCoordinator):
     def __init__(
         self,
         hass: HomeAssistant,
-        session,
+        session: aiohttp.ClientSession,
         stop_number: str,
         refresh: int,
         line_index: dict,

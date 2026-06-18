@@ -38,7 +38,16 @@ async def test_coordinator_enriches_departures_with_category(hass):
 
     data = coord.data
     assert data["stop_name"] == "Brama Portowa"
+    assert data["stop_number"] == "11111"
+    assert data["message"] is None
+    assert data["updated_at"] == "2026-06-17T10:00:00+02:00"
+    assert data["departures"][0]["line"] == "3"
+    assert data["departures"][0]["direction"] == "Pomorzany"
+    assert data["departures"][0]["time_real"] == 5
+    assert data["departures"][0]["time_scheduled"] is None
     assert data["departures"][0]["category"] == "tram"
+    assert data["departures"][1]["line"] == "521"
+    assert data["departures"][1]["time_scheduled"] == "23:58"
     assert data["departures"][1]["category"] == "night"
 
 
