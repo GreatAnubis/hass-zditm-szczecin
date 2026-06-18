@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 
+import aiohttp
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -15,13 +16,13 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS = ["sensor"]
 
 
-async def _get_line_index(hass: HomeAssistant, session) -> dict:
+async def _get_line_index(hass: HomeAssistant, session: aiohttp.ClientSession) -> dict[str, dict]:
     """Fetch and cache the /lines index (number -> info) shared across entries."""
     domain_data = hass.data.setdefault(DOMAIN, {})
     if "line_index" not in domain_data:
         try:
             lines = await fetch_lines(session)
-            domain_data["line_index"] = {str(l.get("number")): l for l in lines}
+            domain_data["line_index"] = {str(line.get("number")): line for line in lines}
         except ZditmApiError as err:
             _LOGGER.warning("Could not fetch /lines, using heuristic classification: %s", err)
             domain_data["line_index"] = {}
@@ -54,7 +55,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unloaded:
-        hass.data[DOMAIN]["entries"].pop(entry.entry_id, None)
+        hass.data.get(DOMAIN, {}).get("entries", {}).pop(entry.entry_id, None)
     return unloaded
 
 
