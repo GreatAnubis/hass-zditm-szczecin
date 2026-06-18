@@ -1,0 +1,11 @@
+{
+  "domain": "zditm_szczecin",
+  "name": "ZDiTM Szczecin",
+  "codeowners": ["@GreatAnubis"],
+  "config_flow": true,
+  "documentation": "https://github.com/GreatAnubis/hass-zditm-szczecin",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/GreatAnubis/hass-zditm-szczecin/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
