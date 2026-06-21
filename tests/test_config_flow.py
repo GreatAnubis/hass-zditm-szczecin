@@ -67,3 +67,30 @@ async def test_duplicate_stop_aborts(hass):
 
     assert result["type"] == "abort"
     assert result["reason"] == "already_configured"
+
+
+@pytest.mark.asyncio
+async def test_options_flow_updates_refresh(hass):
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
+
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={CONF_STOP_NUMBER: "11111", CONF_STOP_NAME: "Brama Portowa"},
+        options={CONF_PAIRS: [], CONF_REFRESH: 60},
+        unique_id="11111",
+    )
+    entry.add_to_hass(hass)
+    with patch("custom_components.zditm_szczecin.fetch_lines", new=AsyncMock(return_value=[])), \
+         patch("custom_components.zditm_szczecin.coordinator.fetch_display", new=AsyncMock(return_value=DISPLAY)), \
+         patch("custom_components.zditm_szczecin.config_flow.fetch_display", new=AsyncMock(return_value=DISPLAY)):
+        assert await hass.config_entries.async_setup(entry.entry_id) is True
+        await hass.async_block_till_done()
+
+        result = await hass.config_entries.options.async_init(entry.entry_id)
+        assert result["step_id"] == "init"
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"], {CONF_PAIRS: [], CONF_REFRESH: "90"}
+        )
+        assert result["type"] == "create_entry"
+
+    assert entry.options[CONF_REFRESH] == 90
