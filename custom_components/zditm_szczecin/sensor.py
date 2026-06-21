@@ -21,6 +21,15 @@ from .coordinator import ZditmCoordinator
 from .times import compute_minutes, is_live
 
 
+def _category_icon(category: str | None) -> str:
+    """Pick an at-a-glance icon: tram vs bus (category text carries fast/night/etc.)."""
+    if category == "tram":
+        return "mdi:tram"
+    if category is None:
+        return "mdi:bus-clock"
+    return "mdi:bus"
+
+
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -73,14 +82,27 @@ class StopNextDepartureSensor(_ZditmBase):
         return compute_minutes(deps[0]["time_real"], deps[0]["time_scheduled"], dt_util.now())
 
     @property
+    def icon(self) -> str:
+        deps = (self.coordinator.data or {}).get("departures", [])
+        return _category_icon(deps[0]["category"] if deps else None)
+
+    @property
     def extra_state_attributes(self) -> dict:
         data = self.coordinator.data or {}
         now = dt_util.now()
+        deps = data.get("departures", [])
+        nxt = deps[0] if deps else None
         return {
             "stop_name": data.get("stop_name"),
             "stop_number": data.get("stop_number"),
             "message": data.get("message"),
             "updated_at": data.get("updated_at"),
+            # Summary of the next departure, so the line and type are visible at a glance
+            # (the state itself stays numeric minutes for numeric_state automations).
+            "next_line": nxt["line"] if nxt else None,
+            "next_direction": nxt["direction"] if nxt else None,
+            "next_category": nxt["category"] if nxt else None,
+            "next_is_live": is_live(nxt["time_real"]) if nxt else None,
             "departures": [
                 {
                     "line": d["line"],
@@ -119,6 +141,11 @@ class LineDirectionSensor(_ZditmBase):
         if d is None:
             return None
         return compute_minutes(d["time_real"], d["time_scheduled"], dt_util.now())
+
+    @property
+    def icon(self) -> str:
+        d = self._match()
+        return _category_icon(d["category"] if d else None)
 
     @property
     def extra_state_attributes(self) -> dict:

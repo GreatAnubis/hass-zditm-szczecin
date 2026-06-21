@@ -64,6 +64,12 @@ async def test_stop_sensor_state_and_attributes(hass):
     assert len(state.attributes["departures"]) == 2
     assert state.attributes["departures"][0]["category"] == "tram"
     assert state.attributes["departures"][0]["minutes"] == 5
+    # next-departure summary (line + type visible at a glance) + dynamic icon
+    assert state.attributes["next_line"] == "3"
+    assert state.attributes["next_direction"] == "Pomorzany"
+    assert state.attributes["next_category"] == "tram"
+    assert state.attributes["next_is_live"] is True
+    assert state.attributes["icon"] == "mdi:tram"
 
 
 @pytest.mark.asyncio
@@ -87,3 +93,5 @@ async def test_stop_sensor_empty_board(hass):
     assert state.state == "unknown"
     assert state.attributes["departures"] == []
     assert state.attributes["message"] is None
+    assert state.attributes["next_line"] is None
+    assert state.attributes["icon"] == "mdi:bus-clock"
