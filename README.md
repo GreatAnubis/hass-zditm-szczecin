@@ -2,6 +2,7 @@
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2024.11%2B-blue.svg)](https://www.home-assistant.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Data: ZDiTM Szczecin (CC0)](https://img.shields.io/badge/data-ZDiTM%20Szczecin%20(CC0)-2e7d32.svg)](https://www.zditm.szczecin.pl/)
 
 Custom integration exposing ZDiTM Szczecin public-transport departures as Home Assistant
