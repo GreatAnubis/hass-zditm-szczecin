@@ -12,3 +12,6 @@ venv/
 # Local working artifacts — not for the public repo
 docs/superpowers/
 .superpowers/
+
+# Claude Code local settings (personal, not for public repo)
+.claude/settings.local.json

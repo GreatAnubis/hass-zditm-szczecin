@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ZDiTM Szczecin — search for a stop",
+        "data": { "query": "Stop name" }
+      },
+      "select_stop": {
+        "title": "Select a stop",
+        "data": { "stop_number": "Stop" }
+      },
+      "pairs": {
+        "title": "Select lines and directions",
+        "description": "Found {count} line+direction pair(s) on the current board. Pick the ones you want as separate sensors (editable later). Empty = next-departure sensor only.",
+        "data": { "pairs": "Lines + directions", "refresh": "Refresh interval" }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the ZDiTM API.",
+      "no_stops": "No stops match that name."
+    },
+    "abort": {
+      "already_configured": "This stop is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Stop options",
+        "data": { "pairs": "Lines + directions", "refresh": "Refresh interval" }
+      }
+    }
+  }
+}
