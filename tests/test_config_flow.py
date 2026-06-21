@@ -94,3 +94,27 @@ async def test_options_flow_updates_refresh(hass):
         assert result["type"] == "create_entry"
 
     assert entry.options[CONF_REFRESH] == 90
+
+
+def test_served_directions_unique_and_capped():
+    from custom_components.zditm_szczecin.config_flow import _served_directions
+
+    display = {
+        "departures": [
+            {"line_number": "3", "direction": "Pomorzany"},
+            {"line_number": "7", "direction": "Pomorzany"},  # duplicate direction
+            {"line_number": "1", "direction": "Głębokie"},
+            {"line_number": "9", "direction": "Krzekowo"},
+            {"line_number": "2", "direction": "Basen Górniczy"},  # beyond limit=3
+        ]
+    }
+    assert _served_directions(display, limit=3) == ["Pomorzany", "Głębokie", "Krzekowo"]
+    assert _served_directions({"departures": []}) == []
+
+
+def test_stop_label_with_and_without_directions():
+    from custom_components.zditm_szczecin.config_flow import _stop_label
+
+    stop = {"name": "Brama Portowa", "number": "11111"}
+    assert _stop_label(stop, ["Pomorzany", "Głębokie"]) == "Brama Portowa (11111) → Pomorzany, Głębokie"
+    assert _stop_label(stop, []) == "Brama Portowa (11111)"

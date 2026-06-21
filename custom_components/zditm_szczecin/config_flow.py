@@ -1,6 +1,7 @@
 """Config and options flow for ZDiTM Szczecin."""
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
 import voluptuous as vol
@@ -32,6 +33,11 @@ from .const import (
 )
 
 
+# Stops repeat by name (one post/number per direction). Cap how many live boards
+# we fetch to disambiguate them, to stay well under the ZDiTM rate limit.
+_MAX_DIR_LOOKUPS = 25
+
+
 def _pair_options(display: dict) -> list[SelectOptionDict]:
     """Build unique (line, direction) select options from a live board."""
     seen: dict[str, str] = {}
@@ -39,6 +45,33 @@ def _pair_options(display: dict) -> list[SelectOptionDict]:
         value = encode_pair(d.get("line_number"), d.get("direction"))
         seen[value] = f"{d.get('line_number')} → {d.get('direction')}"
     return [SelectOptionDict(value=v, label=lbl) for v, lbl in seen.items()]
+
+
+def _served_directions(display: dict, limit: int = 3) -> list[str]:
+    """Unique directions a stop's post serves, from its live board (order preserved)."""
+    seen: list[str] = []
+    for d in display.get("departures", []):
+        direction = d.get("direction")
+        if direction and direction not in seen:
+            seen.append(direction)
+            if len(seen) >= limit:
+                break
+    return seen
+
+
+def _stop_label(stop: dict, directions: list[str]) -> str:
+    """Select-option label: 'Name (number) → dir1, dir2' (directions disambiguate the post)."""
+    base = f"{stop['name']} ({stop['number']})"
+    return f"{base} → {', '.join(directions)}" if directions else base
+
+
+async def _fetch_directions(session, number: str) -> list[str]:
+    """Fetch one stop's served directions; empty on error or empty board (e.g. at night)."""
+    try:
+        display = await fetch_display(session, number)
+    except ZditmApiError:
+        return []
+    return _served_directions(display)
 
 
 def _refresh_selector() -> SelectSelector:
@@ -101,8 +134,20 @@ class ZditmConfigFlow(ConfigFlow, domain=DOMAIN):
             self._pair_opts = _pair_options(display)
             return await self.async_step_pairs()
 
+        # Disambiguate same-named posts by the directions each one serves (from the
+        # live board), fetched concurrently. Falls back to name+number if a board is
+        # empty (e.g. at night) or unreachable.
+        session = async_get_clientsession(self.hass)
+        to_lookup = self._matches[:_MAX_DIR_LOOKUPS]
+        dir_lists = await asyncio.gather(
+            *(_fetch_directions(session, s["number"]) for s in to_lookup)
+        )
+        dirs_by_number = {s["number"]: dirs for s, dirs in zip(to_lookup, dir_lists)}
         options = [
-            SelectOptionDict(value=s["number"], label=f"{s['name']} ({s['number']})")
+            SelectOptionDict(
+                value=s["number"],
+                label=_stop_label(s, dirs_by_number.get(s["number"], [])),
+            )
             for s in self._matches
         ]
         return self.async_show_form(
