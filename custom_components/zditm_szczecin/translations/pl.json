@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ZDiTM Szczecin — szukaj przystanku",
+        "data": { "query": "Nazwa przystanku" }
+      },
+      "select_stop": {
+        "title": "Wybierz przystanek",
+        "data": { "stop_number": "Przystanek" }
+      },
+      "pairs": {
+        "title": "Wybierz linie i kierunki",
+        "description": "Wykryto {count} par(y) linia+kierunek na bieżącej tablicy. Zaznacz te, dla których chcesz osobne sensory (możesz zmienić później). Pusto = tylko sensor następnego odjazdu.",
+        "data": { "pairs": "Linie + kierunki", "refresh": "Częstotliwość odświeżania" }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nie można połączyć się z API ZDiTM.",
+      "no_stops": "Brak przystanków dla tej nazwy."
+    },
+    "abort": {
+      "already_configured": "Ten przystanek jest już dodany."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje przystanku",
+        "data": { "pairs": "Linie + kierunki", "refresh": "Częstotliwość odświeżania" }
+      }
+    }
+  }
+}
