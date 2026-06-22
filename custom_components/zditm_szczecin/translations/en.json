@@ -28,6 +28,7 @@
     "step": {
       "init": {
         "title": "Stop options",
+        "description": "Find stop numbers and locations on the [ZDiTM stop map](https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow).",
         "data": { "pairs": "Lines + directions", "refresh": "Refresh interval" }
       }
     }

@@ -28,6 +28,7 @@
     "step": {
       "init": {
         "title": "Opcje przystanku",
+        "description": "Numery i lokalizacje przystanków znajdziesz na [mapie przystanków ZDiTM](https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow).",
         "data": { "pairs": "Linie + kierunki", "refresh": "Częstotliwość odświeżania" }
       }
     }
