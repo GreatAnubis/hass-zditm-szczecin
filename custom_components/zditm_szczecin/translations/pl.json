@@ -3,6 +3,7 @@
     "step": {
       "user": {
         "title": "ZDiTM Szczecin — szukaj przystanku",
+        "description": "Wpisz nazwę przystanku. ZDiTM obsługuje też gminy ościenne (Police, Tanowo…), więc ta sama nazwa (np. „Wojska Polskiego”) może wystąpić w kilku miejscowościach — numer właściwego słupka sprawdzisz na [mapie przystanków ZDiTM](https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow).",
         "data": { "query": "Nazwa przystanku" }
       },
       "select_stop": {

@@ -3,6 +3,7 @@
     "step": {
       "user": {
         "title": "ZDiTM Szczecin — search for a stop",
+        "description": "Enter a stop name. ZDiTM also serves neighbouring municipalities (Police, Tanowo…), so the same name (e.g. \"Wojska Polskiego\") can appear in several towns — find the exact post number on the [ZDiTM stop map](https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow).",
         "data": { "query": "Stop name" }
       },
       "select_stop": {
