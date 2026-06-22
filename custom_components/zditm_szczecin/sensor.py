@@ -109,6 +109,7 @@ class StopNextDepartureSensor(_ZditmBase):
                     "direction": d["direction"],
                     "minutes": compute_minutes(d["time_real"], d["time_scheduled"], now),
                     "is_live": is_live(d["time_real"]),
+                    "time_real": d["time_real"],
                     "time_scheduled": d["time_scheduled"],
                     "category": d["category"],
                 }

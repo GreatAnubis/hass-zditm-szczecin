@@ -64,6 +64,7 @@ async def test_stop_sensor_state_and_attributes(hass):
     assert len(state.attributes["departures"]) == 2
     assert state.attributes["departures"][0]["category"] == "tram"
     assert state.attributes["departures"][0]["minutes"] == 5
+    assert state.attributes["departures"][0]["time_real"] == 5
     # next-departure summary (line + type visible at a glance) + dynamic icon
     assert state.attributes["next_line"] == "3"
     assert state.attributes["next_direction"] == "Pomorzany"
