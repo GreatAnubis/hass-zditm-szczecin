@@ -8,6 +8,7 @@
       },
       "select_stop": {
         "title": "Select a stop",
+        "description": "Wrong post? The same stop name often means several posts (different directions, sometimes different towns) — confirm the exact number on the [ZDiTM stop map](https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow).",
         "data": { "stop_number": "Stop" }
       },
       "pairs": {

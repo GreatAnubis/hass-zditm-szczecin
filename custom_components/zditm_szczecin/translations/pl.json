@@ -8,6 +8,7 @@
       },
       "select_stop": {
         "title": "Wybierz przystanek",
+        "description": "Nie ten słupek? Ta sama nazwa to często kilka słupków (różne kierunki, czasem różne miejscowości) — właściwy numer sprawdzisz na [mapie przystanków ZDiTM](https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow).",
         "data": { "stop_number": "Przystanek" }
       },
       "pairs": {
